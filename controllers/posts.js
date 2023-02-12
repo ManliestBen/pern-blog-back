@@ -1,9 +1,11 @@
-const { Post } = require('../models')
+const { Post, Comment } = require('../models')
 
 async function index(req, res) {
   try {
-    const cats = await Post.findAll()
-    res.status(200).json(cats)
+    const posts = await Post.findAll({
+      include: [{ model: Comment, as: 'comments' }]
+    })
+    res.status(200).json(posts)
   } catch (error) {
     console.log(error)
     res.status(500).json(error)
@@ -23,7 +25,10 @@ async function create(req, res) {
 
 async function show(req, res) {
   try {
-    const post = await Post.findByPk(req.params.id)
+    const post = await Post.findByPk(
+      req.params.id,
+      {include: {model: Comment, as: 'comments'}}
+    )
     res.status(200).json(post)
   } catch (error) {
     console.log(error)
