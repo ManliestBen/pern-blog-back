@@ -3,7 +3,7 @@ const { Post, Comment } = require('../models')
 async function index(req, res) {
   try {
     const posts = await Post.findAll({
-      include: [{ model: Comment, as: 'comments' }]
+      include: {all: true, nested: true}
     })
     res.status(200).json(posts)
   } catch (error) {
